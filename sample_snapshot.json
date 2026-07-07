@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-08",
+  "venue": "HV",
+  "race_no": 1,
+  "pools": {
+    "WIN": {
+      "total_investment": 12000000,
+      "takeout_rate": 0.175,
+      "horses": [
+        {"no": 1, "name": "Example Horse A", "odds": 3.3},
+        {"no": 2, "name": "Example Horse B", "odds": 5.0},
+        {"no": 3, "name": "Example Horse C", "odds": 8.0},
+        {"no": 4, "name": "Example Horse D", "odds": 12.0}
+      ]
+    },
+    "PLA": {
+      "total_investment": 8500000,
+      "takeout_rate": 0.175,
+      "horses": [
+        {"no": 1, "name": "Example Horse A", "odds": 1.8},
+        {"no": 2, "name": "Example Horse B", "odds": 2.1},
+        {"no": 3, "name": "Example Horse C", "odds": 2.5},
+        {"no": 4, "name": "Example Horse D", "odds": 3.2}
+      ]
+    }
+  }
+}
