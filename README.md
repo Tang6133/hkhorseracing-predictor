@@ -1,6 +1,16 @@
 # HKHorseRacing-Predictor v6.3.1
 
-**A production-oriented machine learning system for Hong Kong horse racing prediction**
+**Production ML for Hong Kong horse racing — place ranking, calibrated probabilities, and race-day intelligence**
+
+[![Predictions](https://img.shields.io/badge/predictions-public%20archive-blue)](predictions/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+> **What this repo is:** A public transparency archive — system documentation and downloadable race-day prediction CSVs.  
+> **What this repo is not:** Source code, trained models, feature pipelines, or live API access. Those remain private.
+
+[Predictions archive](predictions/) · [tangttjason@gmail.com](mailto:tangttjason@gmail.com) · *Last updated: July 2026*
+
+---
 
 ## Contents
 
