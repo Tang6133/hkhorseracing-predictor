@@ -79,7 +79,7 @@ This system goes further by combining:
 | Top-3 Coverage (≥2) | **51.3%** | >30% ✅ |
 | Top-5 Coverage (≥2) | **80.0%** | >50% ✅ |
 | Coverage Stability | **95.6%** | >85% ✅ |
-| Training Data | 46,737 rows · 3,857 races | 2022–2026 |
+| Training Data | 46,737 rows · >3,000 races | 2022–2026 |
 | Features | 141 | — |
 
 ---
