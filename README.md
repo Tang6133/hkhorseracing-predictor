@@ -5,8 +5,13 @@
 [![Predictions](https://img.shields.io/badge/predictions-public%20archive-blue)](predictions/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
+<<<<<<< Updated upstream
 **What this repo is:** A public transparency archive — system documentation and downloadable race-day prediction CSVs.  
 **What this repo is not:** Source code, trained models, feature pipelines, or live API access. Those remain private.
+=======
+> **What this repo is:** A public transparency archive — system documentation and downloadable race-day prediction CSVs.  
+> **What this repo is not:** Source code, trained models, feature pipelines, or live API access. Those remain private.
+>>>>>>> Stashed changes
 
 [Predictions archive](predictions/) · [tangttjason@gmail.com](mailto:tangttjason@gmail.com) · *Last updated: July 2026*
 
@@ -18,6 +23,7 @@
 - [What Problem This Solves](#what-problem-this-solves)
 - [What Makes This Project Different](#what-makes-this-project-different)
 - [Performance](#performance)
+- [Performance Limitations](#performance-limitations)
 - [Product View](#product-view)
 - [Frontend](#frontend)
 - [Why The Modeling Approach Looks Like This](#why-the-modeling-approach-looks-like-this)
@@ -25,12 +31,14 @@
 - [Race-Day Intelligence Layer](#race-day-intelligence-layer)
 - [Track Bias Research](#track-bias-research)
 - [Performance by Distance](#performance-by-distance)
-- [Project Structure](#project-structure)
+- [Repository Contents](#repository-contents)
+- [Internal System Layout](#internal-system-layout)
 - [Research Foundations](#research-foundations)
 - [Repository Scope](#repository-scope)
 - [License](#license)
 
 ---
+
 ## Overview
 
 HKHorseRacing-Predictor is an end-to-end ML platform that predicts **place probability**, ranks contenders, and surfaces **race-day betting context** for Hong Kong horse racing.
@@ -55,21 +63,31 @@ Improved through many iterative cycles of feature engineering, model stacking, c
 Only changes that survived strict time-series testing were kept and deployed.
 
 ---
+
 ## What Problem This Solves
+
 Hong Kong horse racing is a difficult prediction problem:
+
 - races are small, noisy, and highly competitive
 - closing odds already reflect a large amount of market information
 - many public racing models suffer from **data leakage**, poor calibration, or weak race-day usability
+
 This project was built to solve those issues directly.
+
 It focuses on three practical objectives:
+
 1. **Rank horses better than naive baselines**
 2. **Produce calibrated place probabilities across odds ranges**
 3. **Turn model output into race-day tools**, including track bias analysis, pattern tags, model hints, and structured recommendations
 
 ---
+
 ## What Makes This Project Different
+
 Most horse racing ML repos stop at feature engineering and offline modeling.
+
 This system goes further by combining:
+
 | Capability | What it does |
 |-----------|--------------|
 | **Time-safe pipeline** | All historical features are computed using only information available before race time |
@@ -78,33 +96,63 @@ This system goes further by combining:
 | **Race-day UI** | Predictions are presented in a usable frontend instead of notebooks only |
 | **Track-bias intelligence** | Historical draw bias is quantified and matched to the specific race configuration |
 | **Research discipline** | Ideas are tested, rejected, and documented rather than added blindly |
->This makes the project closer to a **real forecasting product** than a one-off machine learning experiment.
+
+> This makes the project closer to a **real forecasting product** than a one-off machine learning experiment.
 
 ---
+
 ## Performance
+
+Hold-out test set · 415 races · 5,151 runners · 141 features
 
 | Metric | Value | Benchmark |
 |--------|-------|-----------|
-| Place AUC | **0.773** | >0.70 ✅ |
-| Top-3 Coverage (≥2) | **51.3%** | >30% ✅ |
-| Top-5 Coverage (≥2) | **80.0%** | >50% ✅ |
-| Coverage Stability | **95.6%** | >85% ✅ |
+| Place AUC | **0.773** | >0.70 (pass) |
+| Top-3 Coverage (≥2) | **51.3%** | >30% (pass) |
+| Top-5 Coverage (≥2) | **80.0%** | >50% (pass) |
+| Coverage Stability | **95.6%** | >85% (pass) |
 | Training Data | 46,737 rows · >3,000 races | 2022–2026 |
 | Features | 141 | — |
 
 ---
+
+## Performance Limitations
+
+Strong offline metrics do **not** imply profitable betting. On the same hold-out set:
+
+| Comparison | Model | Market (closing odds) |
+|------------|-------|----------------------|
+| Place AUC | 0.770 | **0.786** |
+| Win AUC | 0.714 | **0.786** |
+
+Tested value strategies against closing odds produced **negative ROI** (e.g. place-value edge >0.35: −41% ROI). Hong Kong parimutuel takeout (~17.5%) is a structural barrier.
+
+**Where the model still adds value:**
+
+- shortlist generation (Top-3 ≥2 at ~51%)
+- complementary winner identification vs market alone
+- stronger discrimination in extreme longshot segments (>50x odds)
+- race-day context: tags, track bias, pace hints
+
+The system is positioned as a **decision-support and ranking tool**, not a guaranteed profit engine against closing odds.
+
+---
+
 ## Product View
+
 The system is designed as a race-day decision tool, not just a modeling benchmark.
 
 ### Core outputs
+
 - **Place probability** for each horse
 - **Shortlist ranking** for Top-3 / Top-5 coverage
 - **QPQ / value analysis**
 - **Track bias context** by venue / distance / configuration
-- **Pattern tags** such as `◉ 內檔反彈`
+- **Pattern tags** such as `內檔反彈`
 - **Model disagreement hints** when LGB ranker and stacked ensemble diverge
 
 ---
+
 ## Frontend
 
 The project includes a lightweight single-file frontend for race-day usage.
@@ -118,10 +166,14 @@ The project includes a lightweight single-file frontend for race-day usage.
 | About | Model summary, system notes, performance overview |
 
 ---
+
 ## Why The Modeling Approach Looks Like This
+
 The system uses a stacked ensemble because horse racing prediction has **two different requirements**:
+
 - strong **ranking quality**
 - stable **probability calibration**
+
 A single model rarely does both equally well.
 
 | Component | Role |
@@ -130,9 +182,11 @@ A single model rarely does both equally well.
 | **XGBoost / CatBoost** | Capture complementary binary place signals |
 | **Ridge stacking** | Learns model weights from out-of-fold predictions |
 | **Odds-bucket calibration** | Corrects overconfidence across different market segments |
->This design reflects the practical reality that **ranking** and **probability estimation** are related, but not identical, tasks.
+
+> This design reflects the practical reality that **ranking** and **probability estimation** are related, but not identical, tasks.
 
 ---
+
 ## Technical Architecture
 
 ### Data Pipeline
@@ -181,7 +235,7 @@ A single model rarely does both equally well.
 
 | Category | Examples | Count |
 |----------|----------|-------|
-| Speed ​​Figures | SF_last1, SF_avg_last3, SF_trend | 8 |
+| Speed Figures | SF_last1, SF_avg_last3, SF_trend | 8 |
 | Recent Form | avg_pla_last3, form_score, improvement_trend | 10 |
 | Jockey/Trainer | win_30d, place_30d, combo_win_rate | 12 |
 | Sectional Times | final_section_time_last, hist_final_vs_par | 6 |
@@ -194,7 +248,9 @@ A single model rarely does both equally well.
 | + 97 more | going, country, stamina, running style... | 97 |
 
 ---
+
 ## Race-Day Intelligence Layer
+
 The project includes a lightweight rules-and-insight layer on top of model output to make predictions more usable.
 
 ### Tag System
@@ -203,25 +259,29 @@ The system automatically tags horses with identifiable patterns to help users sp
 
 | Tag | Trigger | Historical Impact |
 |-----|---------|-------------------|
-| `◉ 內檔反彈` | Last run >6th + Inside draw (1-3) this race | +15% place rate |
-| `◉ 條件改善` | Last run >8th + Class drop / Weight drop / Recent trial | +15% place rate |
-| `◉ 雙信號` | Both tags triggered | +16% place rate |
+| `內檔反彈` | Last run >6th + Inside draw (1-3) this race | +15% place rate |
+| `條件改善` | Last run >8th + Class drop / Weight drop / Recent trial | +15% place rate |
+| `雙信號` | Both tags triggered | +16% place rate |
 
 > Tags are **UI-only** — they don't modify model probabilities. They highlight horses where historical patterns suggest the model may be conservative.
 
 ### LGB Model Hint
+
 When the LightGBM (lambdarank) model disagrees with the Ridge ensemble on Top-3 picks, a hint card appears:
+
 ```text
-🔍 LGB Model Hint
+LGB Model Hint
 辣得金 (31%)
 1200m sprint — LGB ranking historically more accurate at this distance
 ```
+
 > This only appears for 1200m races where LGB and Ridge diverge. Historical data shows LGB performs better on sprint distances (47% vs 32% Top-3 coverage).
 
 ---
+
 ## Track Bias Research
 
-The system analyzed **3857 historical races** to quantify draw bias across different track configurations. Results are dynamically served via `/api/track-bias` and displayed on the frontend.
+The system analyzed **3,857 historical races** to quantify draw bias across different track configurations. Results are dynamically served via `/api/track-bias` and displayed on the frontend.
 
 ### Methodology
 
@@ -239,16 +299,17 @@ The system analyzed **3857 historical races** to quantify draw bias across diffe
 | 1200m | C+3 | **33.5%** | 22.6% | 22.0% | 25.2% | 26.0% | **+29%** |
 | 1200m | C | **33.5%** | 22.6% | 22.0% | 25.2% | 26.0% | **+29%** |
 | 1400m | C+3 | 26.5% | **26.7%** | 19.6% | 19.4% | 22.8% | +17% |
-| 1800m | C+3 | — | — | — | — | — | Neutral |
+| 1800m | C+3 | N/A | N/A | N/A | N/A | N/A | Neutral |
 
-> **Finding**: C/C+3 1200m shows the strongest inside bias. Inside-drawn horses place 29% more often than the field average. Outside and wide draws are disadvantaged.
+> **Finding**: C/C+3 1200m shows the strongest inside bias. Inside-drawn horses place 29% more often than the field average. Outside and wide draws are disadvantaged.  
+> *Note: C and C+3 rows share identical aggregates in this dataset because the analysis pools configurations with equivalent effective width for those meeting dates.*
 
 #### Sha Tin — Dirt (All-Weather)
 
 | Distance | Inside (1-3) | Middle (4-6) | Outside (7-10) | Wide (11+) | Baseline | Bias |
 |----------|-------------|-------------|----------------|------------|----------|------|
 | 1200m | 30.5% | 28.7% | 22.3% | 22.0% | 26.0% | +17% |
-| 1650m | — | — | — | — | — | Mild |
+| 1650m | N/A | N/A | N/A | N/A | N/A | Mild |
 
 > **Finding**: Dirt track is more fair than grass, but inside still has a mild advantage. Front-runners benefit on dirt.
 
@@ -292,23 +353,54 @@ The system combines statistical findings with official HKJC track notes:
 The track bias data is served live via the API and displayed on the frontend **per race, per distance, per configuration** — not as static text. Each race card shows only the relevant bias for that specific race.
 
 ---
+
 ## Performance by Distance
 
 | Distance | Races | AUC | Top-3 ≥2 | Notes |
 |----------|-------|-----|----------|-------|
-| 1000m (Straight) | — | — | 100% | Small sample, outside bias |
+| 1000m (Straight) | Small sample | N/A | 100% | Outside bias on straight course |
 | 1200m (Sprint) | 206 | 0.746 | 44% | Most common, weakest performance |
 | 1400m (Mile) | — | 0.804 | 75% | Best performing distance |
-| 1650m (Dirt) | — | — | 33% | Dirt track, small sample |
-| 1800m+ (Long) | — | 0.708 | — | Weakest AUC, needs improvement |
+| 1650m (Dirt) | Small sample | N/A | 33% | Dirt track |
+| 1800m+ (Long) | — | 0.708 | N/A | Weakest AUC, needs improvement |
 
 > **Finding**: 1200m sprints are the most common race type (50% of all races) but have the weakest model performance. Mile races (1400m) show the strongest AUC at 0.804. Long distance races (1800m+) remain challenging due to smaller sample sizes and different race dynamics (pace control > raw speed).
 
 ---
-## Project Structure
+
+## Repository Contents
+
+What is **actually in this GitHub repository**:
+
+```text
+hkhorseracing-predictor/
+├── README.md
+├── LICENSE
+└── predictions/
+    └── YYYY-MM-DD_VENUE_predictions.csv
+```
+
+### Predictions Archive
+
+Race-day exports uploaded after each meeting for public auditability.
+
+| Date | Venue | File |
+|------|-------|------|
+| 2026-07-08 | HV (Happy Valley) | [2026-07-08_HV_predictions.csv](predictions/2026-07-08_HV_predictions.csv) |
+
+**Format:** `YYYY-MM-DD_VENUE_predictions.csv` where `VENUE` is `ST` (Sha Tin) or `HV` (Happy Valley).
+
+> Published predictions are for research and analysis only — not betting advice and not guaranteed profit.
+
+---
+
+## Internal System Layout
+
+The production system runs in a private codebase. Layout below is documented for methodology transparency — **these paths are not in this repository**.
+
 ```text
 hkjc_predictor_v5/
-├── server.py/
+├── server.py
 ├── src/hkjc_v5/
 │   ├── features/
 │   │   ├── engineer.py        # Main feature pipeline
@@ -316,18 +408,19 @@ hkjc_predictor_v5/
 │   │   ├── sectional_store.py # Sectional time features
 │   │   └── ...
 │   ├── training/
-│   │   ├── trainer.py        # LGB + XGB + CB + stacking
-│   │   └── calibration.py    # Odds-bucket calibration
+│   │   ├── trainer.py         # LGB + XGB + CB + stacking
+│   │   └── calibration.py     # Odds-bucket calibration
 │   ├── inference/
-│   │   └── predictor.py      # RacePredictor
-│   └── analysis/             # Track bias / market gap analysis
-├── scripts/                  # Build / train / evaluate scripts
-├── models/                   # Trained models (excluded from repo)
-├── data/                     # Parquet / SQLite / raw data (excluded from repo)
-└── index.html                # Single-file frontend
+│   │   └── predictor.py       # RacePredictor
+│   └── analysis/              # Track bias / market gap analysis
+├── scripts/                   # Build / train / evaluate scripts
+├── models/                    # Trained models (not published)
+├── data/                      # Parquet / SQLite / raw data (not published)
+└── index.html                 # Single-file frontend
 ```
 
 ---
+
 ## Research Foundations
 
 This system is informed by prior work in:
@@ -345,6 +438,7 @@ In practice, our experiments confirmed three consistent findings:
 3. Beating closing odds markets is much harder than improving offline AUC
 
 ---
+
 ## Repository Scope
 
 This repository is a **public research and transparency archive**, not a full open-source code release.
@@ -362,7 +456,7 @@ The system was built as a personal production project. I publish documentation a
 
 - System methodology and design decisions
 - Performance summaries and research notes
-- **Race-day prediction exports** in `predictions/`
+- **Race-day prediction exports** in [`predictions/`](predictions/)
 
 ### Ongoing prediction uploads
 
@@ -375,7 +469,7 @@ I will continue uploading prediction CSV files after each meeting:
 > If you are interested in collaboration, licensing, or consulting, please contact me directly at **tangttjason@gmail.com**.
 
 ---
+
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
+This project is licensed under the MIT License. See the [`LICENSE`](LICENSE) file for details.
