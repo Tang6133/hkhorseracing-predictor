@@ -5,13 +5,9 @@
 [![Predictions](https://img.shields.io/badge/predictions-public%20archive-blue)](predictions/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-<<<<<<< Updated upstream
 **What this repo is:** A public transparency archive — system documentation and downloadable race-day prediction CSVs.  
 **What this repo is not:** Source code, trained models, feature pipelines, or live API access. Those remain private.
-=======
-> **What this repo is:** A public transparency archive — system documentation and downloadable race-day prediction CSVs.  
-> **What this repo is not:** Source code, trained models, feature pipelines, or live API access. Those remain private.
->>>>>>> Stashed changes
+
 
 [Predictions archive](predictions/) · [tangttjason@gmail.com](mailto:tangttjason@gmail.com) · *Last updated: July 2026*
 
